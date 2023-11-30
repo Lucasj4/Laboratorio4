@@ -50,7 +50,8 @@ class ControladorUsuarios
    public function ctrAgregarUsuario()
     {
         if (isset($_POST["nombre_usuario"])) {
-            $ecriptar = crypt($_POST["password_usuario"], '$2a$07$usesomesillyhrdrrererherhe$');
+           
+            $encriptar = crypt($_POST["password_usuario"], '$1$SALT$');
 
             $tabla = "usuarios"; 
            
@@ -59,7 +60,7 @@ class ControladorUsuarios
                 "email_usuario" => $_POST["email_usuario"],
                 "apellido_usuario" => $_POST["apellido_usuario"],
                 "rol_usuario" => $_POST["rol_usuario"],
-                "password_usuario" => $ecriptar,
+                "password_usuario" => $encriptar,
                 "estado_usuario" => 1
             );
            
@@ -82,7 +83,16 @@ class ControladorUsuarios
     {
         if (isset($_POST["id_usuario"])) {
             // Verificar si el campo de contraseña se dejó en blanco o no
-            $password = (!empty($_POST["password_usuario"])) ? crypt($_POST["password_usuario"], '$2a$07$usesomesillyhrdrrererherhe$') : null;
+            if ($_POST["password_usuario"] == "")
+            {
+                $password = ControladorUsuarios::ctrMostrarUsuarios("id_usuario", $_POST["id_usuario"]);
+
+                $password = $password["password_usuario"];
+            }
+            else
+            {
+                $password = crypt($_POST["password_usuario"], '$1$SALT$');
+            }
 
             $tabla = "usuarios";
             $datos = array(
@@ -133,20 +143,53 @@ class ControladorUsuarios
 ELIMINAR
 =============================================*/
 static public function ctrEliminarUsuario()
-    {
-        if (isset($_GET["id_usuario"]))
-        {
-            $dato = $_GET["id_usuario"];
-            $respuesta = ModeloUsuarios::mdlEliminarUsuario($dato);
+{
+    if (isset($_GET["id_usuario"])) {
+        $idUsuario = $_GET["id_usuario"];
 
-            if ($respuesta == "ok")
-            {
-                // Redirecciona a la página después de la eliminación
-                header("Location: vistas/modelos/usuarios.php");
+        // Obtener información del usuario
+        $usuario = ModeloUsuarios::mdlMostrarUsuarios("usuarios", "id_usuario", $idUsuario);
+
+        // Verificar si se obtuvo la información del usuario
+        if ($usuario) {
+            // Verificar si el rol del usuario es "Admin"
+            if ($usuario["rol_usuario"] == "Admin") {
+                echo '<script>
+                Swal.fire({
+                    icon: "error",
+                    title: "No puedes eliminar a un usuario con rol de Administrador.",
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+                setTimeout(() => {
+                    window.location.href = "usuarios";
+                }, 1500);
+            </script>';
+                exit();
+            }
+
+            // Intentar eliminar al usuario
+            $respuesta = ModeloUsuarios::mdlEliminarUsuario($idUsuario);
+
+            // Verificar si se eliminó correctamente
+            if ($respuesta == "ok") {
+                echo '<script> 
+                fncSweetAlert("success", "El usuario se eliminó correctamente", "' . $url . '");
+                </script>';
+                exit();
+            } else {
+                echo '<script>
+                    alert("Error al eliminar el usuario. Por favor, inténtelo nuevamente.");
+                    window.location.href = "usuarios";
+                </script>';
                 exit();
             }
         }
     }
+}
+
+
+    
 
     /*=============================================
  Renovar contraseña
@@ -183,8 +226,7 @@ static public function ctrEliminarUsuario()
                  }
                  $nuevoPassword = genPassword(8);
 
-                 $password = crypt($nuevoPassword, '$2a$07$usesomesillyhrdrrererherhe$');
-
+                 $password = crypt($_POST["ingresoPassword"], '$1$SALT$');
                  //Actualizar en la bd la nueva contraseña
 
                  $id_usuario = $respuesta["id_usuario"];
@@ -252,7 +294,7 @@ static public function ctrIngresoUsuario()
             {
                 //$encriptar = crypt($_POST["ingresoPassword"], '$2a$07$usesomesillyhrdrrererherhe$');
 
-                $encriptar = $_POST["ingresoPassword"];
+                $encriptar = crypt($_POST["ingresoPassword"], '$1$SALT$');
 
                 $tabla = "usuarios";
                 $item  = "email_usuario";
@@ -260,7 +302,7 @@ static public function ctrIngresoUsuario()
 
                 $respuesta = ModeloUsuarios::mdlMostrarUsuarios($tabla, $item,
                 $valor);
-                var_dump($respuesta);
+            
 
                 if (is_array($respuesta) && ($respuesta["email_usuario"] ==
                 $_POST["ingresoEmail"] && $respuesta["password_usuario"] == $encriptar))
@@ -280,7 +322,7 @@ static public function ctrIngresoUsuario()
 
                         date_default_timezone_set('America/Argentina/Buenos_Aires');
 
-                        $item1  = "ultimo_login";
+                        $item1  = "fecha_ultimo_ingreso";
                         $valor1 = date('Y-m-d H:i:s');
 
                         $item2  = "id_usuario";

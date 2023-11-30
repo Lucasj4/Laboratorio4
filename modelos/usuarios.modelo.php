@@ -19,12 +19,11 @@ class ModeloUsuarios
             }
             catch (Exception $e)
             {
-                return "Error: " . $e->getMessage();
+                return array("error" => "Error al obtener la información del usuario: " . $e->getMessage());
             }
         }
-        
-
     }
+    
     static public function mdlMostrarRoles($tabla)
     {
         try
@@ -42,6 +41,44 @@ class ModeloUsuarios
     static public function mdlAgregarUsuario($tabla, $datos)
     {
         try {
+
+            
+
+            if(!preg_match('/^[a-zA-ZñÑáéíóúÁÉÍÓÚ ]+$/', $datos["nombre_usuario"])) {
+                echo '<script>
+                    alert("El nombre debe contener solo letras y espacios.");
+                    </script>';
+                return; 
+            }
+
+            if(!preg_match('/^[a-zA-ZñÑáéíóúÁÉÍÓÚ ]+$/', $datos["apellido_usuario"])) {
+                echo '<script>
+                    alert("El apellido debe contener solo letras y espacios.");
+                    </script>';
+                return; 
+            }
+
+   
+
+
+            if(!preg_match('/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/', $datos["email_usuario"])) {
+                echo '<script>
+                    alert("El email tiene un formato incorrecto.");
+                    </script>';
+                return; 
+            }
+
+            $stmtEmail = Conexion::conectar()->prepare("SELECT COUNT(*) as total FROM $tabla WHERE email_usuario = :email_usuario");
+            $stmtEmail->bindParam(":email_usuario", $datos["email_usuario"], PDO::PARAM_STR);
+            $stmtEmail->execute();
+            $resultadoEmail = $stmtEmail->fetch(PDO::FETCH_ASSOC);
+    
+            if ($resultadoEmail['total'] > 0) {
+                echo '<script>
+                    alert("Ya existe un cliente con el mismo correo electrónico.");
+                    </script>';
+                return;
+            }
             $stmt = Conexion::conectar()->prepare("INSERT INTO $tabla(nombre_usuario, apellido_usuario, email_usuario, rol_usuario, password_usuario, estado_usuario, fecha_creacion, fecha_ultimo_ingreso) 
             VALUES (:nombre_usuario, :apellido_usuario, :email_usuario, :rol_usuario, :password_usuario, :estado_usuario, :fecha_creacion, :fecha_ultimo_ingreso)");
     
@@ -86,6 +123,33 @@ public function mdlEditarUsuario($tabla, $datos)
         $stmt->bindParam(":password_usuario", $datos["password_usuario"], PDO::PARAM_STR);
         $stmt->bindParam(":estado_usuario", $datos["estado_usuario"], PDO::PARAM_INT);
         $stmt->bindParam(":id_usuario", $datos["id_usuario"], PDO::PARAM_INT);
+
+        
+        if(!preg_match('/^[a-zA-ZñÑáéíóúÁÉÍÓÚ ]+$/', $datos["nombre_usuario"])) {
+            echo '<script>
+                alert("El nombre debe contener solo letras y espacios.");
+                </script>';
+            return; 
+        }
+
+        if(!preg_match('/^[a-zA-ZñÑáéíóúÁÉÍÓÚ ]+$/', $datos["apellido_usuario"])) {
+            echo '<script>
+                alert("El apellido debe contener solo letras y espacios.");
+                </script>';
+            return; 
+        }
+
+
+
+
+        if(!preg_match('/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/', $datos["email_usuario"])) {
+            echo '<script>
+                alert("El email tiene un formato incorrecto.");
+                </script>';
+            return; 
+        }
+
+
 
         if ($stmt->execute()) {
             return "ok";

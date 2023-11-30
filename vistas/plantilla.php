@@ -61,8 +61,14 @@ if (isset($_SESSION["iniciarSesion"]) && $_SESSION["iniciarSesion"] == "ok")
                     $_GET["pagina"] == "productos" ||
                     $_GET["pagina"] == "clientes" ||
                     $_GET["pagina"] == "agregar_cliente" ||
+                    $_GET["pagina"] == "agregar_categoria" ||
+                    $_GET["pagina"] == "categorias" ||
+                    $_GET["pagina"] == "estadocivil" ||
+                    $_GET["pagina"] == "agregar_estadocivil" ||
+                    $_GET["pagina"] == "editar_estadocivil" ||
                     // $_GET["pagina"] == "home" ||
-                    $_GET["pagina"] == "editar_cliente"
+                    $_GET["pagina"] == "editar_cliente" ||
+                    $_GET["pagina"] == "editar_categoria"
                     )
                     {
                         include 'modulos/' . $_GET["pagina"] . '.php';
@@ -86,7 +92,10 @@ if (isset($_SESSION["iniciarSesion"]) && $_SESSION["iniciarSesion"] == "ok")
     </div>
     <!-- ./wrapper -->
 
-    <script src="<?php echo $url; ?>vistas/js/scripts.js"></script>
+
+   
+    <script src="<?php echo $url; ?>vistas/js/funciones.js"></script>
+   
     <!-- DataTables  & Plugins -->
     <script src="<?php echo $url; ?>vistas/plugins/datatables/jquery.dataTables.min.js"></script>
     <script src="<?php echo $url; ?>vistas/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>

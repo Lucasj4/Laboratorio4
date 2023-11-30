@@ -86,7 +86,9 @@ if (isset($_GET["usuario"])) {
                             value="<?= isset($datosUsuario['apellido_usuario']) ? $datosUsuario['apellido_usuario'] : ''; ?>"
                             class="form-control" placeholder="Ingrese apellido" required>
                     </div>
+                    <?php if ($datosUsuario["rol_usuario"] == "Usuario") { ?>
                     <div class="form-group">
+
                         <label for="estado_usuario">Estado</label>
                         <select class="form-control" name="estado_usuario" required>
                             <option value="1" <?php echo ($usuario['estado_usuario'] ?? 0) == 1 ? 'selected' : ''; ?>>
@@ -94,13 +96,17 @@ if (isset($_GET["usuario"])) {
                             <option value="0" <?php echo ($usuario['estado_usuario'] ?? 0) == 0 ? 'selected' : ''; ?>>
                                 Inactivo</option>
                         </select>
+                    </div>
+                    <?php } ?>
+
+                    <div class="form-group">
                         <label for="rol_usuario">Rol</label>
                         <select class="form-control" name="rol_usuario" required>
-                            <option value="admin"
-                                <?php echo ($datosUsuario['rol_usuario'] ?? '') == 'admin' ? 'selected' : ''; ?>>Admin
+                            <option value="Admin"
+                                <?php echo ($datosUsuario['rol_usuario'] ?? '') == 'Admin' ? 'selected' : ''; ?>>Admin
                             </option>
-                            <option value="usuario"
-                                <?php echo ($datosUsuario['rol_usuario'] ?? '') == 'usuario' ? 'selected' : ''; ?>>
+                            <option value="Usuario"
+                                <?php echo ($datosUsuario['rol_usuario'] ?? '') == 'Usuario' ? 'selected' : ''; ?>>
                                 Usuario</option>
                         </select>
                     </div>
@@ -110,6 +116,7 @@ if (isset($_GET["usuario"])) {
 
                 </div>
                 <!-- /.card-body -->
+                <input type="hidden" name="id_usuario" value="<?php echo $_GET["usuario"]; ?>">
 
                 <!-- Resto del código HTML -->
 

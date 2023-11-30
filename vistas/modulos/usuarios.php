@@ -1,16 +1,4 @@
-<?php
-// Tu lógica de eliminación aquí
-if (isset($_GET["id_usuario"])) {
-    $dato = $_GET["id_usuario"];
-    $respuesta = ModeloUsuarios::mdlEliminarUsuario($dato);
 
-    if ($respuesta == "ok") {
-        echo 'ok';
-    } else {
-        echo 'error';
-    }
-}
-?>
 
 <div class="content-wrapper">
 
@@ -19,10 +7,10 @@ if (isset($_GET["id_usuario"])) {
             <div class="row mb-2">
                 <div class="col-sm-6">
                     <h1>Usuarios</h1>
-                    <?php if ($_SESSION["rol_usuario"] == "admin") { ?>
+                    <?php if ($_SESSION["rol_usuario"] == "Admin") { ?>
                     <a href="agregar_usuario" class="btn btn-primary mt-3"><i class="fa-solid fa-user-plus"></i> Agregar
                         usuario</a>
-                        <?php } ?>
+                    <?php } ?>
                 </div>
             </div>
         </div>
@@ -84,22 +72,16 @@ if (isset($_GET["id_usuario"])) {
                                 <?php echo $estado; ?>
                             </td>
                             <td>
-                            <?php if ($_SESSION["rol_usuario"] == "admin") { ?>
+                            <?php if ($_SESSION["rol_usuario"] == "Admin") { ?>
                                 <a href="index.php?pagina=editar_usuario&usuario=<?php echo $value["id_usuario"]; ?>"
                                     class="btn btn-warning">
-                                    <i class="fas fa-pen-square"></i>
+                                    <i class="fa-solid fa-pen-to-square"></i>
                                 </a>
 
-                                <!-- Agrega un formulario para la eliminación -->
-
-                                <!-- Agrega un campo oculto con el ID del usuario -->
-                                <input type="hidden" name="id_usuario" value="<?php echo $value["id_usuario"]; ?>">
-                                <!-- Agrega un botón de submit para enviar el formulario al cargar la página -->
                                 <button data-id="<?php echo $value["id_usuario"]; ?>" type="button"
                                     class="btn btn-danger btnEliminarUsuario">
-                                    <i class="fas fa-trash"></i> Eliminar Usuario
+                                    <i class="fa-solid fa-trash"></i>
                                 </button>
-
 
                                 <?php } ?>
                             </td>
@@ -115,3 +97,10 @@ if (isset($_GET["id_usuario"])) {
 
     </section>
 </div>
+
+<?php
+
+$eliminar = new ControladorUsuarios();
+$eliminar->ctrEliminarUsuario();
+
+?>

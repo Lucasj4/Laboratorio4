@@ -4,11 +4,11 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Clientes</h1>
+                    <h1>Categorias</h1>
                     <?php if ($_SESSION["rol_usuario"] == "Admin") { ?>
-                    <a href="agregar_cliente" class="btn btn-primary mt-3"><i class="fa-solid fa-user-plus"></i> Agregar
-                        cliente</a>
-                    <?php } ?>
+                    <a href="agregar_categoria" class="btn btn-primary mt-3"><i class="fas fa-tag"></i></i> Agregar
+                        categoria</a>
+                        <?php } ?>
                 </div>
             </div>
         </div>
@@ -24,62 +24,51 @@
                     <thead>
                         <tr>
                             <th>Nombre</th>
-                            <th>Apellido</th>
-                            <th>DNI</th>
-                            <th>Estado civil</th>
-                            <th>Edad</th>
-                            <th>Acciones</th>
+                            <th>Descripcion</th>
+                            <th>Fecha de creación</th>
+                        
                         </tr>
                     </thead>
                     <tbody>
 
                         <?php
 
-                        $clientes = ControladorClientes::ctrMostrarClientes(null, null);
+                        $categorias = ControladorCategorias::ctrMostrarCategorias(null, null);
                         
                    
                             
             
-                        foreach ($clientes as $key => $value)
+                        foreach ($categorias as $key => $value)
                         {
                         ?>
                         <tr>
                             <td>
-                                <?php echo $value["nombre_cliente"]; ?>
+                                <?php echo $value["nombre_categoria"]; ?>
                             </td>
 
                             <td>
-                                <?php echo $value["apellido_cliente"]; ?>
+                                <?php echo $value["descripcion_categoria"]; ?>
                             </td>
                             <td>
-                                <?php echo $value["dni_cliente"]; ?>
+                                <?php echo $value["fecha_creacion"]; ?>
                             </td>
-                            <td>
-                                <?php echo $value["estado_civil"]; ?>
-                            </td>
-                            <td>
-
-                                <?php 
-                                          $idCliente = $value["id_cliente"];
-                                          $edadCliente = ControladorClientes::ctrobtenerEdadCliente($idCliente);
-                                echo $edadCliente; ?>
-                            </td>
-
+                            
                             <td>
                                 <?php if ($_SESSION["rol_usuario"] == "Admin") { ?>
-                                <a href="index.php?pagina=editar_cliente&cliente=<?php echo $value["id_cliente"]; ?>"
+                                <a href="index.php?pagina=editar_categoria&categoria=<?php echo $value["id_categoria"]; ?>"
                                     class="btn btn-warning">
                                     <i class="fa-solid fa-pen-to-square"></i>
                                 </a>
 
-                                <button data-id="<?php echo $value["id_cliente"]; ?>" type="button"
-                                    class="btn btn-danger btnEliminarCliente">
+                                <button data-id="<?php echo $value["id_categoria"]; ?>" type="button"
+                                    class="btn btn-danger btnEliminarCategoria">
                                     <i class="fa-solid fa-trash"></i>
                                 </button>
 
                                 <?php } ?>
                             </td>
-
+                           
+                           
                         </tr>
 
                         <?php } ?>
@@ -91,20 +80,11 @@
         </div>
 
     </section>
-  
+ 
 </div>
-
-<!-- ... Tu código HTML anterior ... -->
-
-
-
 <?php
 
-$eliminar = new ControladorClientes();
-$eliminar->ctrEliminarCliente();
+$eliminar = new ControladorCategorias();
+$eliminar->ctrEliminarCategoria();
 
 ?>
-
-
-
-

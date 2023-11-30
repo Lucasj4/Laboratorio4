@@ -2,6 +2,7 @@
 
     
     $cliente = ControladorClientes::ctrMostrarClientes("id_cliente", $_GET["cliente"]);
+    $estadosCiviles = ControladorEstadoCivil::ctrMostrarEstadosCiviles(null, null);
     // $funciones = new Funciones();
     // $edadCliente = $funciones->calcularEdad($cliente["f_nacimiento"]);
  
@@ -62,15 +63,14 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="estado_civil_id">Estado Civil</label>
-                        <select class="form-control" name="estado_civil_id" required>
+                        <label for="estado_civil">Estado Civil</label>
+                        <select class="form-control" name="estado_civil" required>
+                            <option value="">Seleccione un estado civil</option>
                             <?php
-                                $estadosCiviles = ControladorClientes::mdlMostrarEstadosCiviles();
                                 foreach ($estadosCiviles as $estadoCivil) {
-                                    $selected = ($estadoCivil['id_estado_civil'] == $datosCliente['estado_civil_id']) ? 'selected' : '';
-                                    echo "<option value='" . $estadoCivil["id_estado_civil"] . "' $selected>" . $estadoCivil["nombre_estado_civil"] . "</option>";
+                                    echo "<option value='" .  $estadoCivil["nombre_estado_civil"] . "'>" . $estadoCivil["nombre_estado_civil"] . "</option>";
                                 }
-                            ?>
+                                ?>
                         </select>
                     </div>
 

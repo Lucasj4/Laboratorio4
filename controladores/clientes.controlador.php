@@ -36,7 +36,7 @@ class ControladorClientes
             "email_cliente" => $_POST["email_cliente"],
             "dni_cliente" => $_POST["dni_cliente"],
             "fecha_nacimiento_cliente" => date("Y-m-d", strtotime($_POST["fecha_nacimiento_cliente"])),
-            "estado_civil_id" => $_POST["estado_civil_id"],
+            "estado_civil" => $_POST["estado_civil"],
             );
             //print_r($datos);
 
@@ -49,8 +49,17 @@ class ControladorClientes
             if ($respuesta == "ok")
             {
                 echo '<script>
-                    window.location = "clientes";
-                    </script>';
+                Swal.fire({
+                    title: "Cliente agregado exitosamente",
+                    icon: "success",
+                    confirmButtonColor: "#3085d6",
+                    confirmButtonText: "Aceptar"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location = "clientes";
+                    }
+                });
+            </script>';
             }
         }
     }
@@ -70,7 +79,7 @@ class ControladorClientes
             "apellido_cliente" => $_POST["apellido_cliente"],
             "email_cliente" => $_POST["email_cliente"],
             "dni_cliente" => $_POST["dni_cliente"],
-            "estado_civil_id" => $_POST["estado_civil_id"],
+            "estado_civil" => $_POST["estado_civil"],
             );
 
             $url = ControladorPlantilla::url();
@@ -79,8 +88,17 @@ class ControladorClientes
 
             if ($respuesta == "ok") {
                 echo '<script>
-                    window.location = "clientes";
-                </script>';
+                Swal.fire({
+                    title: "Cliente editado exitosamente",
+                    icon: "success",
+                    confirmButtonColor: "#3085d6",
+                    confirmButtonText: "Aceptar"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location = "clientes";
+                    }
+                });
+            </script>';
             } else {
                 echo "Error al editar el cliente: " . $respuesta;
             }
@@ -92,25 +110,30 @@ class ControladorClientes
     /*=============================================
     ELIMINAR
     =============================================*/
+
+
     static public function ctrEliminarCliente()
     {
-        
         $url = ControladorPlantilla::url() . "clientes";
-
+    
         if(isset($_GET["id_cliente"]))
         {
             $dato = $_GET["id_cliente"];
             $respuesta = ModeloClientes::mdlEliminarCliente($dato);
-
+    
             if ($respuesta == "ok")
             {
                 echo '<script> 
                 fncSweetAlert("success", "El cliente se eliminó correctamente", "' . $url . '");
                 </script>';
-
+            }
+            else
+            {
+                echo '<script>
+                console.log("Error al eliminar el cliente con ID: ' . $dato . '");
+                </script>';
             }
         }
-
     }
 
     static public function ctrobtenerEdadCliente($idCliente)

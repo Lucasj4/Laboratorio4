@@ -35,12 +35,12 @@ $categoriasProductos = ModeloProductos::mdlMostrarCategoriasProductos();
                             required>
                     </div>
                     <div class="form-group">
-                        <label for="categoria_id">Categoría</label>
-                        <select class="form-control" name="id_categoria" required>
+                        <label for="categoria_producto">Categoría</label>
+                        <select class="form-control" name="categoria_producto" required>
                             <option value="">Seleccione una categoría</option>
                             <?php
                             foreach ($categoriasProductos as $categoriaProducto) {
-                                echo "<option value='" . $categoriaProducto["id_categoria"] . "'>" . $categoriaProducto["nombre_categoria"] . "</option>";
+                                echo "<option value='" . $categoriaProducto["nombre_categoria"]  . "'>" . $categoriaProducto["nombre_categoria"] . "</option>";
                             }
                             ?>
                         </select>
@@ -58,8 +58,8 @@ $categoriasProductos = ModeloProductos::mdlMostrarCategoriasProductos();
                     <div class="form-group">
                         <label for="estado_producto">Estado</label>
                         <select class="form-control" name="estado_producto" required>
-                            <option value="En Stock">En Stock</option>
-                            <option value="Agotado">Agotado</option>
+                            <option value="Activo">Activo</option>
+                            <option value="Inactivo">Inactivo</option>
                         </select>
                     </div>
 
@@ -71,6 +71,7 @@ $categoriasProductos = ModeloProductos::mdlMostrarCategoriasProductos();
 
                 </div>
                 <!-- /.card-body -->
+                <input type="hidden" name="id_usuario" value="<?php echo isset($_GET["usuario"]) ? $_GET["usuario"] : ''; ?>">
 
                 <?php
                 // Aquí debes utilizar el controlador y método correspondiente para agregar productos

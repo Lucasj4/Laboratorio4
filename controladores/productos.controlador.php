@@ -13,14 +13,14 @@ class ControladorProductos
     // Agregar producto
     public function ctrAgregarProducto()
     {
-        var_dump($_POST);
+        
         if (isset($_POST["nombre_producto"]))
         {
            
             $tabla = "productos";
             $datos = array(
                 "nombre_producto" => $_POST["nombre_producto"],
-                "id_categoria" => $_POST["id_categoria"],
+                "categoria_producto" => $_POST["categoria_producto"],
                 "precio_producto" => $_POST["precio_producto"],
                 "imagen_producto" => $_POST["imagen_producto"], // Asumiendo que es un ID o un indicador de imagen
                 "estado_producto" => $_POST["estado_producto"],
@@ -34,9 +34,17 @@ class ControladorProductos
             if ($respuesta == "ok")
             {
                 echo '<script>
-                alert("Producto agregado correctamente");
-                window.location = "productos";
-                </script>';
+                Swal.fire({
+                    title: "Producto agregada exitosamente",
+                    icon: "success",
+                    confirmButtonColor: "#3085d6",
+                    confirmButtonText: "Aceptar"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location = "productos";
+                    }
+                });
+            </script>';
             }
         }
     }
@@ -50,7 +58,7 @@ class ControladorProductos
             $datos = array(
                 "id_producto" => $_POST["id_producto"],
                 "nombre_producto" => $_POST["nombre_producto"],
-                "id_categoria" => $_POST["id_categoria"],
+                "categoria_producto" => $_POST["categoria_producto"],
                 "precio_producto" => $_POST["precio_producto"],
                 "imagen_producto" => $_POST["imagen_producto"],
                 "estado_producto" => $_POST["estado_producto"],
@@ -63,35 +71,58 @@ class ControladorProductos
             if ($respuesta == "ok")
             {
                 echo '<script>
-                alert("Producto actualizado correctamente");
-                window.location = "productos";
-                </script>';
+                Swal.fire({
+                    title: "Producto editado exitosamente",
+                    icon: "success",
+                    confirmButtonColor: "#3085d6",
+                    confirmButtonText: "Aceptar"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location = "productos";
+                    }
+                });
+            </script>';
             }
             else
             {
-                echo "Error al editar el producto";
+               echo' <script>
+                Swal.fire({
+                  icon: "error",
+                  title: "Error",
+                  text: "Error a editar producto",
+                });
+              </script>';
             }
         }
     }
 
     // Eliminar producto
-    static public function ctrEliminarProducto($idProducto)
+    static public function ctrEliminarProducto()
     {
-        if ($idProducto)
-        {
-            $tabla = "productos";
-            $respuesta = ModeloProductos::mdlEliminarProducto($tabla, $idProducto);
+        $url = ControladorPlantilla::url() . "productos";
 
-            if ($respuesta == "ok")
-            {
+        if (isset($_GET["id_producto"])) {
+            $idProducto = $_GET["id_producto"];
+            $respuesta = ModeloProductos::mdlEliminarProducto($idProducto);
+
+            if ($respuesta == "ok") {
                 echo '<script>
-                alert("Producto eliminado correctamente");
-                window.location = "productos";
+                    Swal.fire({
+                        title: "Éxito",
+                        text: "Producto eliminado exitosamente",
+                        icon: "success",
+                        confirmButtonColor: "#3085d6",
+                        confirmButtonText: "Aceptar"
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location = "productos";
+                        }
+                    });
                 </script>';
-            }
-            else
-            {
-                echo "Error al eliminar el producto";
+            } else {
+                echo '<script>
+                    alert("Error al eliminar el producto: ' . $respuesta . '");
+                </script>';
             }
         }
     }

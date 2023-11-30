@@ -7,9 +7,12 @@ require_once 'controladores/usuarios.controlador.php';
 require_once 'modelos/usuarios.modelo.php';
 require_once 'controladores/clientes.controlador.php';
 require_once 'modelos/clientes.modelo.php';
-
+require_once 'controladores/categorias.controlador.php';
+require_once 'modelos/categorias.modelo.php';
 require_once 'controladores/tipousuario.controlador.php';
 require_once 'modelos/tipousuario.modelo.php';
+require_once 'controladores/estadocivil.controlador.php';
+require_once 'modelos/estadocivil.modelo.php';
 
 $plantilla = new ControladorPlantilla();
 $plantilla->ctrMostrarPlantilla();

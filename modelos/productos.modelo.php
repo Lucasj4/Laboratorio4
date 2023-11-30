@@ -31,11 +31,35 @@ class ModeloProductos
     static public function mdlAgregarProducto($tabla, $datos)
     {
         try {
+            if(!preg_match('/^[a-zA-ZñÑáéíóúÁÉÍÓÚ ]+$/', $datos["nombre_producto"])) {
+                echo '<script>
+                    alert("El nombre debe contener solo letras y espacios.");
+                    </script>';
+                return; 
+            }
+            if(!preg_match('/^[a-zA-ZñÑáéíóúÁÉÍÓÚ ]+$/', $datos["categoria_producto"])) {
+                echo '<script>
+                    alert("La categoria debe contener solo letras y espacios.");
+                    </script>';
+                return; 
+            }
+            if(!preg_match('/^[0-9]+$/', $datos["precio_producto"])) {
+                echo '<script>
+                    alert("El precio debe contener solo numeros.");
+                    </script>';
+                return; 
+            }
+            if(!preg_match('/^[0-9]+$/', $datos["stock_producto"])) {
+                echo '<script>
+                    alert("El stock debe contener solo numeros.");
+                    </script>';
+                return; 
+            }
             // Corregir la consulta SQL y agregar fecha_creacion
-            $stmt = Conexion::conectar()->prepare("INSERT INTO $tabla (nombre_producto, id_categoria, precio_producto, imagen_producto, estado_producto, stock_producto, fecha_creacion) VALUES (:nombre_producto, :id_categoria, :precio_producto, :imagen_producto, :estado_producto, :stock_producto, NOW())");
+            $stmt = Conexion::conectar()->prepare("INSERT INTO $tabla (nombre_producto, categoria_producto, precio_producto, imagen_producto, estado_producto, stock_producto, fecha_creacion) VALUES (:nombre_producto, :categoria_producto, :precio_producto, :imagen_producto, :estado_producto, :stock_producto, NOW())");
     
             $stmt->bindParam(":nombre_producto", $datos['nombre_producto'], PDO::PARAM_STR);
-            $stmt->bindParam(":id_categoria", $datos['id_categoria'], PDO::PARAM_INT);
+            $stmt->bindParam(":categoria_producto", $datos['categoria_producto'], PDO::PARAM_STR);
             $stmt->bindParam(":precio_producto", $datos['precio_producto'],PDO::PARAM_INT);
             $stmt->bindParam(":imagen_producto", $datos['imagen_producto'],PDO::PARAM_STR);
             $stmt->bindParam(":estado_producto", $datos['estado_producto'], PDO::PARAM_STR);
@@ -57,11 +81,35 @@ class ModeloProductos
     =============================================*/
     static public function mdlEditarProducto($tabla, $datos)
     {
-        $stmt = Conexion::conectar()->prepare("UPDATE $tabla SET nombre_producto = :nombre_producto, id_categoria = :id_categoria, precio_producto = :precio_producto, imagen_producto = :imagen_producto, estado_producto = :estado_producto, stock_producto = :stock_producto WHERE id_producto = :id_producto");
+        if(!preg_match('/^[a-zA-ZñÑáéíóúÁÉÍÓÚ ]+$/', $datos["nombre_producto"])) {
+            echo '<script>
+                alert("El nombre debe contener solo letras y espacios.");
+                </script>';
+            return; 
+        }
+        if(!preg_match('/^[a-zA-ZñÑáéíóúÁÉÍÓÚ ]+$/', $datos["categoria_producto"])) {
+            echo '<script>
+                alert("La categoria debe contener solo letras y espacios.");
+                </script>';
+            return; 
+        }
+        if(!preg_match('/^[0-9]+$/', $datos["precio_producto"])) {
+            echo '<script>
+                alert("El precio debe contener solo numeros.");
+                </script>';
+            return; 
+        }
+        if(!preg_match('/^[0-9]+$/', $datos["stock_producto"])) {
+            echo '<script>
+                alert("El stock debe contener solo numeros.");
+                </script>';
+            return; 
+        }
+        $stmt = Conexion::conectar()->prepare("UPDATE $tabla SET nombre_producto = :nombre_producto, categoria_producto = :categoria_producto, precio_producto = :precio_producto, imagen_producto = :imagen_producto, estado_producto = :estado_producto, stock_producto = :stock_producto WHERE id_producto = :id_producto");
 
         $stmt->bindParam(":id_producto", $datos['id_producto'], PDO::PARAM_INT);
         $stmt->bindParam(":nombre_producto", $datos['nombre_producto'], PDO::PARAM_STR);
-        $stmt->bindParam(":id_categoria", $datos['id_categoria'], PDO::PARAM_INT);
+        $stmt->bindParam(":categoria_producto", $datos['categoria_producto'], PDO::PARAM_STR);
         $stmt->bindParam(":precio_producto", $datos['precio_producto'], PDO::PARAM_STR);
         $stmt->bindParam(":imagen_producto", $datos['imagen_producto'], PDO::PARAM_STR);
         $stmt->bindParam(":estado_producto", $datos['estado_producto'], PDO::PARAM_INT);
@@ -74,19 +122,18 @@ class ModeloProductos
         }
 }
 
-    /*=============================================
-    ELIMINAR PRODUCTO
-    =============================================*/
-    static public function mdlEliminarProducto($tabla, $idProducto)
+static public function mdlEliminarProducto($idProducto)
     {
-        $stmt = Conexion::conectar()->prepare("DELETE FROM $tabla WHERE id = :id");
-
-        $stmt->bindParam(":id", $idProducto, PDO::PARAM_INT);
-
-        if ($stmt->execute()) {
-            return "ok";
-        } else {
-            return $stmt->errorInfo();
+        try {
+            $stmt = Conexion::conectar()->prepare("DELETE FROM productos WHERE id_producto = :id_producto");
+            $stmt->bindParam(":id_producto", $idProducto, PDO::PARAM_INT);
+            if ($stmt->execute()) {
+                return "ok";
+            } else {
+                return "error";
+            }
+        } catch (Exception $e) {
+            return "Error: " . $e->getMessage();
         }
     }
     static public function mdlMostrarCategoriasProductos()

@@ -2,7 +2,7 @@
 
 
 $producto = ControladorProductos::ctrMostrarProductos("id_producto", $_GET["producto"]);
-
+$categoriasProductos = ModeloProductos::mdlMostrarCategoriasProductos();
 
 // Resto del código...
 ?>
@@ -55,8 +55,8 @@ $producto = ControladorProductos::ctrMostrarProductos("id_producto", $_GET["prod
                     <div class="form-group">
                         <label for="estado_producto">Estado</label>
                         <select class="form-control" name="estado_producto" required>
-                            <option value="en_stock" <?php echo ($producto['estado_producto'] == 'en_stock') ? 'selected' : ''; ?>>En Stock</option>
-                            <option value="agotado" <?php echo ($producto['estado_producto'] == 'agotado') ? 'selected' : ''; ?>>Agotado</option>
+                            <option value="Activo">Activo</option>
+                            <option value="Inactivo">Inactivo</option>
                         </select>
                     </div>
                     <div class="form-group">
@@ -66,17 +66,16 @@ $producto = ControladorProductos::ctrMostrarProductos("id_producto", $_GET["prod
                     </div>
                     
                     <div class="form-group">
-                        <label for="id_categoria">Categoría</label>
-                        <select class="form-control" name="id_categoria" required>
+                        <label for="categoria_producto">Categoría</label>
+                        <select class="form-control" name="categoria_producto" required>
+                            <option value="">Seleccione una categoría</option>
                             <?php
-                                $categorias = ModeloProductos::mdlMostrarCategoriasProductos();
-                                foreach ($categorias as $categoria) {
-                                    $selected = ($categoria['id_categoria'] == $datosProducto['id_categoria']) ? 'selected' : '';
-                                    echo "<option value='" . $categoria["id_categoria"] . "' $selected>" . $categoria["nombre_categoria"] . "</option>";
-                                }
+                            foreach ($categoriasProductos as $categoriaProducto) {
+                                echo "<option value='" . $categoriaProducto["nombre_categoria"]  . "'>" . $categoriaProducto["nombre_categoria"] . "</option>";
+                            }
                             ?>
                         </select>
-                    </div> 
+                    </div>
 
 
 

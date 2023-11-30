@@ -2,15 +2,15 @@
 
 class Conexion
 {
-    /* const HOST = "localhost";
-    const DBNAME = "controlstockcom_bel";
-    const USER = "controlstockcom_bel";
-    const PASSWORD = "Control968"; */
-
     const HOST = "localhost";
-    const DBNAME = "trabajofinal";
-    const USER = "root";
-    const PASSWORD = "";
+    const DBNAME = "controlstockcom_julia";
+    const USER = "controlstockcom_julia";
+    const PASSWORD = "Control968"; 
+
+    // const HOST = "localhost";
+    // const DBNAME = "trabajofinal";
+    // const USER = "root";
+    // const PASSWORD = "";
 
     static public function conectar()
     {

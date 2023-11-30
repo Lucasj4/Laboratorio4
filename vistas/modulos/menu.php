@@ -40,6 +40,18 @@
             </a>
           </li>
           <li class="nav-item">
+            <a href="categorias" class="nav-link">
+            <i class="fas fa-tag"></i>
+              <p>Categorias</p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="estadocivil" class="nav-link">
+            <i class="fas fa-tag"></i>
+              <p>Estado civil</p>
+            </a>
+          </li>
+          <li class="nav-item">
                     <a href="salir" class="nav-link">
                         <i class="nav-icon fa-solid fa-right-from-bracket"></i>
                         <p>

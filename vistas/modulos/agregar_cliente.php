@@ -1,6 +1,6 @@
 <?php
 
-$estadosCiviles = ControladorClientes::mdlMostrarEstadosCiviles();
+$estadosCiviles = ControladorEstadoCivil::ctrMostrarEstadosCiviles(null, null);
 ?>
 
 
@@ -56,12 +56,12 @@ $estadosCiviles = ControladorClientes::mdlMostrarEstadosCiviles();
                         <input type="date" name="fecha_nacimiento_cliente" class="form-control" required>
                     </div>
                     <div class="form-group">
-                        <label for="estado_civil_cliente">Estado Civil</label>
-                        <select class="form-control" name="estado_civil_id" required>
+                        <label for="estado_civil">Estado Civil</label>
+                        <select class="form-control" name="estado_civil" required>
                             <option value="">Seleccione un estado civil</option>
                             <?php
                                 foreach ($estadosCiviles as $estadoCivil) {
-                                    echo "<option value='" . $estadoCivil["id_estado_civil"] . "'>" . $estadoCivil["nombre_estado_civil"] . "</option>";
+                                    echo "<option value='" .  $estadoCivil["nombre_estado_civil"] . "'>" . $estadoCivil["nombre_estado_civil"] . "</option>";
                                 }
                                 ?>
                         </select>
